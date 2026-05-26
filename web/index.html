@@ -3,54 +3,84 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width,initial-scale=1" />
-  <title>Day 7 AI Web App</title>
+  <title>Day 8 Multi-Turn AI Chat</title>
   <style>
-    body { font-family: system-ui, Arial; max-width: 860px; margin: 40px auto; padding: 0 16px; }
-    textarea { width: 100%; height: 120px; padding: 10px; font-size: 14px; }
+    body { font-family: system-ui, Arial; max-width: 900px; margin: 40px auto; padding: 0 16px; }
+    textarea { width: 100%; height: 90px; padding: 10px; font-size: 14px; }
     button { padding: 10px 14px; font-size: 14px; cursor: pointer; }
     .row { display: flex; gap: 12px; align-items: center; margin-top: 12px; }
     .status { margin-top: 12px; font-size: 14px; }
+    .chat { margin-top: 16px; border: 1px solid #ddd; border-radius: 10px; padding: 12px; }
+    .msg { margin: 10px 0; }
+    .role { font-weight: 600; }
     pre { background: #f6f6f6; padding: 12px; white-space: pre-wrap; border-radius: 8px; }
   </style>
 </head>
 <body>
-  <h1>AI Web App (Local)</h1>
-  <p>Enter text below and send it to your AI backend.</p>
+  <h1>Multi-Turn Conversational AI (Local)</h1>
+  <p>This chat persists via a session_id stored in your browser.</p>
 
-  <textarea id="prompt" placeholder="Type your question or instruction..."></textarea>
+  <div class="chat" id="chat"></div>
+
+  <textarea id="prompt" placeholder="Type your message..."></textarea>
 
   <div class="row">
     <button id="send">Send</button>
-    <button id="clear">Clear</button>
+    <button id="clearInput">Clear Input</button>
+    <button id="resetSession">Reset Conversation</button>
   </div>
 
   <div class="status" id="status"></div>
-  <h3>Answer</h3>
-  <pre id="output"></pre>
 
   <script>
     const promptEl = document.getElementById("prompt");
     const statusEl = document.getElementById("status");
-    const outputEl = document.getElementById("output");
+    const chatEl = document.getElementById("chat");
+
+    function getSessionId() {
+      const key = "day8_session_id";
+      let id = localStorage.getItem(key);
+      if (!id) {
+        id = "sess_" + crypto.randomUUID();
+        localStorage.setItem(key, id);
+      }
+      return id;
+    }
+
+    function appendToChat(role, content) {
+      const div = document.createElement("div");
+      div.className = "msg";
+      div.innerHTML = `<div class="role">${role}</div><pre>${escapeHtml(content)}</pre>`;
+      chatEl.appendChild(div);
+      chatEl.scrollTop = chatEl.scrollHeight;
+    }
+
+    function escapeHtml(str) {
+      return str
+        .replaceAll("&", "&amp;")
+        .replaceAll("<", "&lt;")
+        .replaceAll(">", "&gt;");
+    }
 
     document.getElementById("send").addEventListener("click", async () => {
       const prompt = promptEl.value.trim();
-      outputEl.textContent = "";
       statusEl.textContent = "";
 
       if (!prompt) {
-        statusEl.textContent = "Please enter a prompt.";
+        statusEl.textContent = "Please enter a message.";
         return;
       }
 
+      const session_id = getSessionId();
+      appendToChat("You", prompt);
+      promptEl.value = "";
       statusEl.textContent = "Calling backend...";
 
       try {
-        const sessionId = getSessionId();
         const res = await fetch("/api/chat", {
           method: "POST",
           headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({ session_id: sessionId, prompt })
+          body: JSON.stringify({ session_id, prompt })
         });
 
         const data = await res.json();
@@ -59,29 +89,25 @@
           return;
         }
 
+        appendToChat("Assistant", data.answer);
         statusEl.textContent = "Done.";
-        outputEl.textContent = data.answer;
       } catch (err) {
         statusEl.textContent = "Request failed: " + err;
       }
     });
 
-    document.getElementById("clear").addEventListener("click", () => {
+    document.getElementById("clearInput").addEventListener("click", () => {
       promptEl.value = "";
-      outputEl.textContent = "";
       statusEl.textContent = "";
       promptEl.focus();
     });
-    function getSessionId() {
-    const key = "day8_session_id";
-    let id = localStorage.getItem(key);
-    if (!id) {
-      // Simple client-generated session id
-      id = "sess_" + crypto.randomUUID();
-      localStorage.setItem(key, id);
-    }
-    return id;
-  }
+
+    document.getElementById("resetSession").addEventListener("click", () => {
+      localStorage.removeItem("day8_session_id");
+      chatEl.innerHTML = "";
+      statusEl.textContent = "Session reset. New conversation will start on next message.";
+      promptEl.focus();
+    });
   </script>
 </body>
 </html>
