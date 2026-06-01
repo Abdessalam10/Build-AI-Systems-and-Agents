@@ -126,12 +126,12 @@ def run_agent(goal: str, max_steps: int = 8) -> Dict[str, Any]:
 
     for step in range(1, max_steps + 1):
         resp = client.chat.completions.create(
-            model="gpt-4o-mini",
+            model="gpt-5.4-mini",
             messages=messages,
             tools=TOOLS_SCHEMA,
             tool_choice="auto",
             temperature=0.2,
-            max_tokens=500,
+            max_completion_tokens=500,
         )
 
         msg = resp.choices[0].message

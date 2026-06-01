@@ -33,9 +33,9 @@ def generate_answer_with_memory(user_text: str, history: List[Dict]) -> str:
     messages.append({"role": "user", "content": user_text})
 
     resp = client.chat.completions.create(
-        model="gpt-4o-mini",
+        model="gpt-5.4-mini",
         messages=messages,
         temperature=0.2,
-        max_tokens=350,
+        max_completion_tokens=350,
     )
     return resp.choices[0].message.content.strip()

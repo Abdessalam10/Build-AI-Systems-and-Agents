@@ -20,10 +20,10 @@ def call_llm(client: OpenAI, user_text: str) -> str:
     messages = build_messages(user_text)
 
     resp = client.chat.completions.create(
-        model="gpt-4o-mini",
+        model="gpt-5.4-mini",
         messages=messages,
         temperature=0.2,
-        max_tokens=300,
+        max_completion_tokens=300,
     )
 
     return resp.choices[0].message.content.strip()

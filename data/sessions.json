@@ -1,1 +1,29 @@
-{}
+{
+  "sess_0a827a26-1812-4e67-9ee6-5294b059bb95": {
+    "session_id": "sess_0a827a26-1812-4e67-9ee6-5294b059bb95",
+    "created_at": 1780312714,
+    "updated_at": 1780312796,
+    "messages": [
+      {
+        "role": "user",
+        "content": "this is a test for the web interface",
+        "ts": 1780312714
+      },
+      {
+        "role": "assistant",
+        "content": "Got it — this is a test for the web interface. How can I help?",
+        "ts": 1780312739
+      },
+      {
+        "role": "user",
+        "content": "do you know how is Assawer Bahri ?",
+        "ts": 1780312793
+      },
+      {
+        "role": "assistant",
+        "content": "I’m not sure who Assawer Bahri is. If you mean a specific person, place, or organization, can you give me a bit more context?",
+        "ts": 1780312796
+      }
+    ]
+  }
+}

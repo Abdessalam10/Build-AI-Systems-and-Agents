@@ -37,10 +37,10 @@ Rules:
 
 def call_llm_for_json(client: OpenAI, user_text: str) -> str:
     resp = client.chat.completions.create(
-        model="gpt-4o-mini",
+        model="gpt-5.4-mini",
         messages=build_messages(user_text),
         temperature=0.0,
-        max_tokens=250,
+        max_completion_tokens=250,
     )
     return resp.choices[0].message.content.strip()
 
