@@ -1,0 +1,61 @@
+{
+  "total": 10,
+  "passed": 8,
+  "failed": 2,
+  "results": [
+    {
+      "id": "tc_001_normal",
+      "pass": true,
+      "errors": []
+    },
+    {
+      "id": "tc_002_high_urgency",
+      "pass": true,
+      "errors": []
+    },
+    {
+      "id": "tc_003_missing_requester",
+      "pass": true,
+      "errors": []
+    },
+    {
+      "id": "tc_004_ambiguous",
+      "pass": true,
+      "errors": []
+    },
+    {
+      "id": "tc_005_long_text",
+      "pass": true,
+      "errors": []
+    },
+    {
+      "id": "tc_006_injection_attempt",
+      "pass": false,
+      "errors": [
+        "Blocked phrase detected: 'system prompt'"
+      ]
+    },
+    {
+      "id": "tc_007_weird_formatting",
+      "pass": true,
+      "errors": []
+    },
+    {
+      "id": "tc_008_non_english",
+      "pass": true,
+      "errors": []
+    },
+    {
+      "id": "tc_009_emptyish",
+      "pass": false,
+      "errors": [
+        "summary is empty."
+      ]
+    },
+    {
+      "id": "tc_010_hostile",
+      "pass": true,
+      "errors": []
+    }
+  ]
+}
